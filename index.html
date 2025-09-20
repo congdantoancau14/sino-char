@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pinyin Dictionary Grid</title>
+<style>
+  body {
+    font-family: sans-serif;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 20px; /* chừa chỗ cho label */
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .block {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    border: 2px solid #333;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: white;
+  }
+
+  .square {
+    font-size: 140px; /* chữ Hán */
+  }
+
+  /* Đường nền */
+  .square::before,
+  .square::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .square::before {
+    background:
+      linear-gradient(to right, transparent 49.5%, red 50%, transparent 50.5%),
+      linear-gradient(to bottom, transparent 49.5%, red 50%, transparent 50.5%);
+  }
+  .square::after {
+    background:
+      linear-gradient(45deg, transparent 49.5%, rgba(0,0,0,0.3) 50%, transparent 50.5%),
+      linear-gradient(-45deg, transparent 49.5%, rgba(0,0,0,0.3) 50%, transparent 50.5%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .pinyin {
+    font-size: 1em; /* nhỏ hơn để vừa */
+    font-weight: bold;
+    text-align: center;
+    padding: 4px;
+  }
+
+  #pinyin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+#pinyin .pyhv {
+  margin: 4px 0;
+  padding: 2px 0;
+  border-bottom: 1px dashed #ccc;
+}
+
+#pinyin .py {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+#pinyin .hv {
+  font-size: 14px;
+  color: #555;
+}
+
+
+  /* Input & Button style */
+  #input, button {
+    width: 85%;
+    height: 60%;
+    border: none;
+    font-size: 5.6em; /* input to hơn */
+    text-align: center;
+    border-radius: 4px;
+    outline: none;
+  }
+  button {
+    cursor: pointer;
+    background: #f2f2f2;
+    border: 1px solid #aaa;
+    transition: background 0.2s;
+  }
+  button:hover {
+    background: #ddd;
+  }
+
+  /* Label */
+  .label {
+    margin-top: 6px;
+    font-size: 0.9em;
+    color: #555;
+    text-align: center;
+  }
+
+
+  /* Fonts demo */
+  .jiagu { font-family: "Noto Serif SC", serif; }
+  .zhuanti { font-family: "ZCOOL QingKe HuangYou", cursive; }
+  .kaiti { font-family: "KaiTi","STKaiti",serif; }
+  .caoshu { font-family: "Ma Shan Zheng", cursive; }
+  .handwriting { font-family: "Zhi Mang Xing", cursive; }
+
+    @font-face {
+    font-family: 'JiaGu';
+    src: url('BeiShiDaJiaGuWenZiTi-1.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .jiagu, #jiagu {
+    font-family: 'JiaGu', serif;
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+
+<div class="grid">
+  
+  <!-- Row 1 -->
+  <div class="cell">
+    <div class="block"><input id="input" maxlength="1" placeholder="字" oninput="showChar()"></div>
+    <div class="label">Input</div>
+  </div>
+  <div class="cell">
+    <div class="block"><button onclick="pasteChar()">📋</button></div>
+    <div class="label">Paste</div>
+  </div>
+  <div class="cell">
+    <div class="block"><span id="pinyin" class="content pinyin">Pinyin</span></div>
+    <div class="label">Pinyin / Hán Việt</div>
+  </div>
+  <div class="cell">
+    <div class="block square kaiti"><span id="kaiti" class="content">字</span></div>
+    <div class="label">KaiTi</div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="cell">
+    <div class="block square jiagu"><span id="jiagu" class="content">字</span></div>
+    <div class="label">JiaGu</div>
+  </div>
+  <div class="cell">
+    <div class="block square zhuanti"><span id="zhuanti" class="content">字</span></div>
+    <div class="label">ZhuanTi</div>
+  </div>
+  <div class="cell">
+    <div class="block square caoshu"><span id="caoshu" class="content">字</span></div>
+    <div class="label">CaoShu</div>
+  </div>
+  <div class="cell">
+    <div class="block square handwriting"><span id="handwriting" class="content">字</span></div>
+    <div class="label">Handwriting</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pinyin-pro/3.27.0/index.js" integrity="sha512-MvP/4MeY8BO3JanwrBm/qUF4gDi/oaZlVG4rKQU/sGOg8STU20puDMlCqF0G+CeXVGWZJ3MI8tv+q1+8QoiDdg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  return lines.map(line => {
+    // tách theo dấu phẩy, nhưng bỏ qua dấu phẩy trong cặp ""
+    const values = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+    let obj = {
+      char: values[0],
+      hanviet: values[1],
+      pinyin: values[2]
+    };
+
+    // xử lý cột hanviet: bỏ " nếu có, đổi ' thành "
+    let hvRaw = obj.hanviet.trim();
+    if (hvRaw.startsWith('"') && hvRaw.endsWith('"')) {
+      hvRaw = hvRaw.slice(1, -1);
+    }
+    try {
+      obj.hanviet = JSON.parse(hvRaw.replace(/'/g, '"'));
+    } catch {
+      obj.hanviet = [];
+    }
+    return obj;
+  });
+}
+
+
+let dictionary = [];
+
+async function loadDefaultCSV() {
+  try {
+    const res = await fetch("https://raw.githubusercontent.com/ph0ngp/hanviet-pinyin-wordlist/refs/heads/main/hanviet.csv");
+    const text = await res.text();
+    dictionary = parseCSV(text);
+    console.log("Đã load hanviet.csv từ GitHub:", dictionary.length, "dòng");
+    // console.log(dictionary)
+  } catch (err) {
+    console.error("Không load được CSV", err);
+    alert("Không load được dữ liệu online!");
+  }
+}
+
+function lookupChar(char) {
+  return dictionary.filter(row => row.char === char);
+}
+
+function showChar() {
+  const char = document.getElementById("input").value.trim();
+  if (!char) return;
+
+  ["kaiti","jiagu","zhuanti","caoshu","handwriting"].forEach(id=>{
+    document.getElementById(id).textContent = char || "字";
+  });
+
+  const found = lookupChar(char);
+console.log(found)
+  if (found.length > 0) {
+    document.getElementById("pinyin").innerHTML = found.map(f => {
+      let hv = f.hanviet.length > 0 ? f.hanviet.join(", ") : "(không có)";
+
+      // fallback: nếu pinyin trong CSV bị "*" hoặc rỗng → tự sinh từ pinyin-pro
+      let py = f.pinyin && f.pinyin !== "*" ? f.pinyin 
+              : window.pinyinPro.pinyin(char, { toneType: "pinyin" });
+
+      return `
+        <div class="pyhv">
+          <div class="py">${py}</div>
+          <div class="hv">${hv}</div>
+        </div>`;
+    }).join("");
+  } else {
+    // Nếu CSV không có chữ này → vẫn fallback bằng pinyin-pro
+    let py = window.pinyinPro.pinyin(char, { toneType: "pinyin" });
+    document.getElementById("pinyin").innerHTML = `
+      <div class="pyhv">
+        <div class="py">${py}</div>
+        <div class="hv">(chưa có Hán Việt)</div>
+      </div>`;
+  }
+}
+
+
+async function pasteChar() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById("input").value = text.trim()[0] || "";
+    showChar();
+  } catch {
+    alert("Clipboard bị chặn, hãy paste thủ công!");
+  }
+}
+
+loadDefaultCSV();
+</script>
+
+
+
+</body>
+</html>
