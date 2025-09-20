@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Pinyin + Hán Việt Demo</title>
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.18.3/dist/index.umd.min.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .block { margin: 10px 0; font-size: 24px; }
+  input {
+    width: 150px; height: 50px; font-size: 28px;
+    text-align: center; border: 2px solid #666; border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+  <h2>Pinyin + Hán Việt Dictionary</h2>
+  <input id="charInput" maxlength="1" placeholder="字">
+  <div class="block">Pinyin: <span id="pinyin"></span></div>
+  <div class="block">Hán Việt: <span id="hanviet"></span></div>
+
+<script>
+// small demo hanviet dictionary (có thể mở rộng sau)
+const hanVietDict = {
+  "字": "tự",
+  "天": "thiên",
+  "人": "nhân",
+  "大": "đại",
+  "山": "sơn",
+  "水": "thuỷ",
+  "日": "nhật",
+  "月": "nguyệt",
+  "心": "tâm",
+  "中": "trung"
+};
+
+const input = document.getElementById("charInput");
+const pinyinEl = document.getElementById("pinyin");
+const hanvietEl = document.getElementById("hanviet");
+
+input.addEventListener("input", e => {
+  const char = e.target.value.trim();
+  if (!char) {
+    pinyinEl.textContent = "";
+    hanvietEl.textContent = "";
+    return;
+  }
+  // lấy pinyin từ pinyin-pro
+  const py = window.pinyinPro.pinyin(char, { toneType: "pinyin" });
+  pinyinEl.textContent = py;
+
+  // lookup âm Hán Việt từ dict
+  hanvietEl.textContent = hanVietDict[char] || "(chưa có trong từ điển)";
+});
+</script>
+</body>
+</html>

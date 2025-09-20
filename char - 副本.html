@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pinyin Dictionary Grid</title>
+<style>
+  body {
+    font-family: sans-serif;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 20px; /* chừa chỗ cho label */
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .block {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    border: 2px solid #333;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: white;
+  }
+
+  .square {
+    font-size: 140px; /* chữ Hán */
+  }
+
+  /* Đường nền */
+  .square::before,
+  .square::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .square::before {
+    background:
+      linear-gradient(to right, transparent 49.5%, red 50%, transparent 50.5%),
+      linear-gradient(to bottom, transparent 49.5%, red 50%, transparent 50.5%);
+  }
+  .square::after {
+    background:
+      linear-gradient(45deg, transparent 49.5%, rgba(0,0,0,0.3) 50%, transparent 50.5%),
+      linear-gradient(-45deg, transparent 49.5%, rgba(0,0,0,0.3) 50%, transparent 50.5%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .pinyin {
+    font-size: 1em; /* nhỏ hơn để vừa */
+    font-weight: bold;
+    text-align: center;
+    padding: 4px;
+  }
+
+  /* Input & Button style */
+  input, button {
+    width: 85%;
+    height: 60%;
+    border: none;
+    font-size: 5.6em; /* input to hơn */
+    text-align: center;
+    border-radius: 4px;
+    outline: none;
+  }
+  button {
+    cursor: pointer;
+    background: #f2f2f2;
+    border: 1px solid #aaa;
+    transition: background 0.2s;
+  }
+  button:hover {
+    background: #ddd;
+  }
+
+  /* Label */
+  .label {
+    margin-top: 6px;
+    font-size: 0.9em;
+    color: #555;
+    text-align: center;
+  }
+
+  /* Fonts demo */
+  .jiagu { font-family: "Noto Serif SC", serif; }
+  .zhuanti { font-family: "ZCOOL QingKe HuangYou", cursive; }
+  .kaiti { font-family: "KaiTi","STKaiti",serif; }
+  .caoshu { font-family: "Ma Shan Zheng", cursive; }
+  .handwriting { font-family: "Zhi Mang Xing", cursive; }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+
+<script>
+const dict = {
+  "你": { pinyin: "nǐ", hanviet: "nhĩ" },
+  "好": { pinyin: "hǎo", hanviet: "hảo" },
+  "天": { pinyin: "tiān", hanviet: "thiên" },
+  "地": { pinyin: "dì", hanviet: "địa" }
+};
+
+function showChar() {
+  const char = document.getElementById("input").value.trim();
+  const info = dict[char] || { pinyin: "(unknown)", hanviet: "" };
+
+  document.getElementById("pinyin").textContent = 
+    char ? info.pinyin + (info.hanviet ? " / " + info.hanviet : "") : "Pinyin";
+
+  document.getElementById("kaiti").textContent = char || "字";
+  document.getElementById("jiagu").textContent = char || "字";
+  document.getElementById("zhuanti").textContent = char || "字";
+  document.getElementById("caoshu").textContent = char || "字";
+  document.getElementById("handwriting").textContent = char || "字";
+}
+
+async function pasteChar() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById("input").value = text.trim();
+    showChar();
+  } catch {
+    alert("Clipboard blocked, paste manually!");
+  }
+}
+</script>
+</head>
+<body>
+
+<div class="grid">
+  <!-- Row 1 -->
+  <div class="cell">
+    <div class="block"><input id="input" maxlength="1" placeholder="字" oninput="showChar()"></div>
+    <div class="label">Input</div>
+  </div>
+  <div class="cell">
+    <div class="block"><button onclick="pasteChar()">📋</button></div>
+    <div class="label">Paste</div>
+  </div>
+  <div class="cell">
+    <div class="block"><span id="pinyin" class="content pinyin">Pinyin</span></div>
+    <div class="label">Pinyin / Hán Việt</div>
+  </div>
+  <div class="cell">
+    <div class="block square kaiti"><span id="kaiti" class="content">字</span></div>
+    <div class="label">KaiTi</div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="cell">
+    <div class="block square jiagu"><span id="jiagu" class="content">字</span></div>
+    <div class="label">JiaGu</div>
+  </div>
+  <div class="cell">
+    <div class="block square zhuanti"><span id="zhuanti" class="content">字</span></div>
+    <div class="label">ZhuanTi</div>
+  </div>
+  <div class="cell">
+    <div class="block square caoshu"><span id="caoshu" class="content">字</span></div>
+    <div class="label">CaoShu</div>
+  </div>
+  <div class="cell">
+    <div class="block square handwriting"><span id="handwriting" class="content">字</span></div>
+    <div class="label">Handwriting</div>
+  </div>
+</div>
+
+</body>
+</html>
