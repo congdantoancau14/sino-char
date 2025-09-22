@@ -28,7 +28,7 @@
     height: 200px;
     position: relative;
     border: 2px solid #333;
-    border-radius: 6px;
+    /* border-radius: 6px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -226,6 +226,53 @@ body.yinzhang-bg {
 
 
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+<!-- CSS: thêm vào <style> -->
+
+  
+<style>
+/* @font-face {
+  font-family: 'Yinzhang';
+  src: url('font/白舟角崩朱文.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+} */
+
+.screen-border-part {
+  position: fixed;
+  pointer-events: none;
+  /* z-index: 9999; */
+  z-index: -2;
+  display: flex;
+  font-family: 'Yinzhang', serif;
+  font-size: 40px;
+  color: rgba(180, 0, 0, 0.2); /* đỏ đồng màu */
+  user-select: none;
+  line-height: 1;
+}
+
+/* top & bottom hàng ngang */
+.border-top, .border-bottom {
+  left: 0;
+  right: 0;
+  height: 50px;
+  justify-content: center;
+}
+.border-top { top: 0; }
+.border-bottom { bottom: 0; }
+
+/* left & right cột dọc */
+.border-left, .border-right {
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  flex-direction: column;
+  align-items: center;
+}
+.border-left { left: 0; }
+.border-right { right: 0; }
+</style>
+
 
 </head>
 <body>
@@ -248,13 +295,13 @@ body.yinzhang-bg {
   </div>
   <div class="cell">
     <div class="block square songti"><span id="songti" class="content">字</span></div>
-    <div class="label">Songti</div>
+    <div class="label">宋体 | Tống thể</div>
   </div>
 
   <!-- Row 2 -->
   <div class="cell">
     <div class="block square jiagu"><span id="jiagu" class="content">字</span></div>
-    <div class="label">JiaGu</div>
+    <div class="label">甲骨文 | Giáp cốt</div>
   </div>
   <!-- <div class="cell">
     <div class="block square zhuanti"><span id="zhuanti" class="content">字</span></div>
@@ -262,39 +309,98 @@ body.yinzhang-bg {
   </div> -->
   <div class="cell">
     <div class="block square dazhuan"><span id="dazhuan" class="content">字</span></div>
-    <div class="label">dazhuan</div>
+    <div class="label">大篆 | Đại triện</div>
   </div>
   <div class="cell">
     <div class="block square xiaozhuan"><span id="xiaozhuan" class="content">字</span></div>
-    <div class="label">xiaozhuan</div>
+    <div class="label">小篆 | Tiểu triện</div>
   </div>
   <div class="cell">
     <div class="block square lishu"><span id="lishu" class="content">字</span></div>
-    <div class="label">lishu</div>
+    <div class="label">隶书 | Lệ Thư</div>
   </div>
 
   <!-- Row 3 -->
   <div class="cell">
     <div class="block square kaiti"><span id="kaiti" class="content">字</span></div>
-    <div class="label">KaiTi</div>
+    <div class="label">楷书 | Khải thể</div>
   </div>
   <div class="cell">
     <div class="block square xingshu"><span id="xingshu" class="content">字</span></div>
-    <div class="label">xingshu</div>
+    <div class="label">行书 | Hành thư</div>
   </div>
   <div class="cell">
     <div class="block square caoshu"><span id="caoshu" class="content">字</span></div>
-    <div class="label">CaoShu</div>
+    <div class="label">草书 | Thảo thư</div>
   </div>
   <div class="cell">
     <div class="block square handwriting"><span id="handwriting" class="content">字</span></div>
-    <div class="label">Handwriting</div>
+    <div class="label">手写|钢笔 | Handwriting | Viết tay</div>
   </div>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pinyin-pro/3.27.0/index.js" integrity="sha512-MvP/4MeY8BO3JanwrBm/qUF4gDi/oaZlVG4rKQU/sGOg8STU20puDMlCqF0G+CeXVGWZJ3MI8tv+q1+8QoiDdg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/opencc-js/dist/umd/full.js"></script>
+
+<div id="screen-border">
+  <div class="screen-border-part border-top" id="border-top"></div>
+  <div class="screen-border-part border-bottom" id="border-bottom"></div>
+  <div class="screen-border-part border-left" id="border-left"></div>
+  <div class="screen-border-part border-right" id="border-right"></div>
+</div>
+
+<script>
+function updateScreenBorder(char) {
+  if (!char) char = "印"; // mặc định
+
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  const top = document.getElementById("border-top");
+  const bottom = document.getElementById("border-bottom");
+  const left = document.getElementById("border-left");
+  const right = document.getElementById("border-right");
+
+  // clear trước
+  [top,bottom,left,right].forEach(el => el.innerHTML = "");
+
+  // tính số ký tự
+  const charSize = 40; // match font-size
+  const horizCount = Math.ceil(vw / charSize);
+  const vertCount = Math.ceil(vh / charSize);
+
+  // top & bottom (ngang)
+  let row = char.repeat(horizCount);
+  top.textContent = row;
+  bottom.textContent = row;
+
+  // left & right (dọc)
+  let col = "";
+  for (let i = 0; i < vertCount; i++) col += char + "\n";
+  left.textContent = col;
+  right.textContent = col;
+}
+
+// init + resize
+window.addEventListener("resize", () => {
+  const input = document.getElementById("input");
+  const ch = input ? (input.value.trim()[0] || "印") : "印";
+  updateScreenBorder(ch);
+});
+
+// nếu có input gõ chữ
+// const inputEl = document.getElementById("input");
+// if (inputEl) {
+//   inputEl.addEventListener("input", (e) => {
+//     updateScreenBorder(e.target.value.trim()[0] || "印");
+//   });
+//   updateScreenBorder(inputEl.value.trim()[0] || "印");
+// } else {
+//   updateScreenBorder("印");
+// }
+</script>
 
 <script>
 
@@ -352,7 +458,7 @@ let currentTradChar = "";
 let jiaguShowingTrad = JIAGU_SHOWING_INIT;
 
 document.getElementById("jiagu").addEventListener("click", () => {
-  console.log(jiaguShowingTrad)
+  // console.log(jiaguShowingTrad)
   jiaguShowingTrad = !jiaguShowingTrad;
   document.getElementById("jiagu").textContent = jiaguShowingTrad ? currentTradChar : currentChar;
 });
@@ -433,37 +539,9 @@ bg.innerText = char || "字";
 
 // cập nhật nền pattern
   updateYinzhangBackground(tradChar);
+
+  updateScreenBorder(tradChar);
 }
-
-// function updateYinzhangBackground(char) {
-//   if (!char) char = "字";
-
-//   const size = 120;   // tile size
-//   const repeats = 5;  // số chữ trong 1 tile (để xoay khác nhau)
-
-//   let texts = "";
-//   for (let i = 0; i < repeats; i++) {
-//     let angle = Math.floor(Math.random() * 30 - 15); // xoay -15° đến +15°
-//     let x = Math.random() * size;
-//     let y = Math.random() * size;
-//     texts += `<text x="${x}" y="${y}" font-family="Yinzhang" font-size="60"
-//       fill="rgba(200,0,0,0.08)" transform="rotate(${angle},${x},${y})"
-//       text-anchor="middle" dominant-baseline="central">${char}</text>`;
-//   }
-
-//   const svg = `
-//     <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-//       ${texts}
-//     </svg>`;
-
-//   const svgData = encodeURIComponent(svg)
-//     .replace(/'/g, "%27")
-//     .replace(/"/g, "%22");
-
-//   document.body.style.backgroundImage = `url("data:image/svg+xml,${svgData}")`;
-//   document.body.style.backgroundRepeat = "repeat";
-//   document.body.style.backgroundSize = `${size}px ${size}px`;
-// }
 
 
 function updateYinzhangBackground(char) {
@@ -484,6 +562,56 @@ function updateYinzhangBackground(char) {
   document.body.style.backgroundRepeat = "repeat";
   document.body.style.backgroundSize = "100px 100px"; // khoảng cách pattern
 }
+
+
+// function updateYinzhangBackground(char) {
+//   if (!char) char = "字";
+
+//   const size = 150;   // tile size
+//   const repeats = 5;  // số dấu trong 1 tile
+
+//   let texts = "";
+//   for (let i = 0; i < repeats; i++) {
+//     let angle = Math.floor(Math.random() * 30 - 15); // xoay -15° đến +15°
+//     let x = Math.random() * size;
+//     let y = Math.random() * size;
+
+//     // random màu đỏ (tông 180–240), alpha 0.06–0.12
+//     let r = 180 + Math.floor(Math.random() * 60); 
+//     let g = Math.floor(Math.random() * 30);   
+//     let b = Math.floor(Math.random() * 30);   
+//     let alpha = 0.06 + Math.random() * 0.06;
+
+//     let color = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+
+//     // ~30% dấu có blur nhẹ
+//     let useBlur = Math.random() < 0.3;
+//     let filter = useBlur ? 'url(#blurFilter)' : '';
+
+//     texts += `<text x="${x}" y="${y}" font-family="Yinzhang" font-size="60"
+//       fill="${color}" transform="rotate(${angle},${x},${y})"
+//       text-anchor="middle" dominant-baseline="central"
+//       filter="${filter}">${char}</text>`;
+//   }
+
+//   const svg = `
+//     <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+//       <defs>
+//         <filter id="blurFilter">
+//           <feGaussianBlur in="SourceGraphic" stdDeviation="0.8"/>
+//         </filter>
+//       </defs>
+//       ${texts}
+//     </svg>`;
+
+//   const svgData = encodeURIComponent(svg)
+//     .replace(/'/g, "%27")
+//     .replace(/"/g, "%22");
+
+//   document.body.style.backgroundImage = `url("data:image/svg+xml,${svgData}")`;
+//   document.body.style.backgroundRepeat = "repeat";
+//   document.body.style.backgroundSize = `${size}px ${size}px`;
+// }
 
 
 async function pasteChar() {
