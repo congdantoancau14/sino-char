@@ -130,11 +130,67 @@
 
 
   /* Fonts demo */
-  .jiagu { font-family: "Noto Serif SC", serif; }
+  /* .jiagu { font-family: "Noto Serif SC", serif; }
   .zhuanti { font-family: "ZCOOL QingKe HuangYou", cursive; }
   .kaiti { font-family: "KaiTi","STKaiti",serif; }
   .caoshu { font-family: "Ma Shan Zheng", cursive; }
   .handwriting { font-family: "Zhi Mang Xing", cursive; }
+  .dazhuan { font-family: "ZCOOL QingKe HuangYou", cursive; }
+  .xiaozhuan { font-family: "ZCOOL QingKe HuangYou", cursive; }
+  .lishu { font-family: "ZCOOL QingKe HuangYou", cursive; }
+  .xingshu { font-family: "ZCOOL QingKe HuangYou", cursive; }
+  .songti { font-family: "Noto Serif SC", cursive; } */
+
+  /* --- Custom Oracle Bone (Giáp cốt) font --- */
+@font-face {
+  font-family: 'JiaGu';
+  src: url('BeiShiDaJiaGuWenZiTi-1.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 甲骨文 (Giáp cốt) */
+.jiagu, #jiagu {
+  font-family: 'JiaGu', serif;
+}
+
+/* 篆体 (Chuyển thể / Đại triện, Tiểu triện) */
+.zhuanti, #zhuanti,
+.dazhuan, #dazhuan,
+.xiaozhuan, #xiaozhuan {
+  font-family: "ZCOOL QingKe HuangYou", cursive;
+}
+
+/* 楷书 (Khải thư) */
+.kaiti, #kaiti {
+  font-family: "KaiTi", "STKaiti", serif;
+}
+
+/* 草书 (Thảo thư) */
+.caoshu, #caoshu {
+  font-family: "Ma Shan Zheng", cursive;
+}
+
+/* 行书 (Hành thư) */
+.xingshu, #xingshu {
+  font-family: "Zhi Mang Xing", cursive;
+}
+
+/* 隶书 (Lệ thư) */
+.lishu, #lishu {
+  font-family: "ZCOOL QingKe HuangYou", cursive;
+}
+
+/* 宋体 (Tống thể) */
+.songti, #songti {
+  font-family: "Noto Serif SC", serif;
+}
+
+/* 手写 (Handwriting) */
+.handwriting, #handwriting {
+  font-family: "Zhi Mang Xing", cursive;
+}
+
 
     @font-face {
     font-family: 'JiaGu';
@@ -170,8 +226,8 @@
     <div class="label">Pinyin / Hán Việt</div>
   </div>
   <div class="cell">
-    <div class="block square kaiti"><span id="kaiti" class="content">字</span></div>
-    <div class="label">KaiTi</div>
+    <div class="block square songti"><span id="songti" class="content">字</span></div>
+    <div class="label">Songti</div>
   </div>
 
   <!-- Row 2 -->
@@ -179,9 +235,31 @@
     <div class="block square jiagu"><span id="jiagu" class="content">字</span></div>
     <div class="label">JiaGu</div>
   </div>
-  <div class="cell">
+  <!-- <div class="cell">
     <div class="block square zhuanti"><span id="zhuanti" class="content">字</span></div>
     <div class="label">ZhuanTi</div>
+  </div> -->
+  <div class="cell">
+    <div class="block square dazhuan"><span id="dazhuan" class="content">字</span></div>
+    <div class="label">dazhuan</div>
+  </div>
+  <div class="cell">
+    <div class="block square xiaozhuan"><span id="xiaozhuan" class="content">字</span></div>
+    <div class="label">xiaozhuan</div>
+  </div>
+  <div class="cell">
+    <div class="block square lishu"><span id="lishu" class="content">字</span></div>
+    <div class="label">lishu</div>
+  </div>
+
+  <!-- Row 3 -->
+  <div class="cell">
+    <div class="block square kaiti"><span id="kaiti" class="content">字</span></div>
+    <div class="label">KaiTi</div>
+  </div>
+  <div class="cell">
+    <div class="block square xingshu"><span id="xingshu" class="content">字</span></div>
+    <div class="label">xingshu</div>
   </div>
   <div class="cell">
     <div class="block square caoshu"><span id="caoshu" class="content">字</span></div>
@@ -245,7 +323,7 @@ function showChar() {
   const char = document.getElementById("input").value.trim();
   if (!char) return;
 
-  ["kaiti","jiagu","zhuanti","caoshu","handwriting"].forEach(id=>{
+  ["songti","jiagu","dazhuan","xiaozhuan","lishu","kaiti","xingshu","caoshu","handwriting"].forEach(id=>{
     document.getElementById(id).textContent = char || "字";
   });
 
