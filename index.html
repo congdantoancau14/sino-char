@@ -209,6 +209,19 @@
   font-family: 'Handwriting', cursive;
 }
 
+@font-face {
+  font-family: 'YinZhang';
+  src: url('font/白舟角崩朱文.ttf') format('truetype');
+}
+body.yinzhang-bg {
+  font-family: 'Yinzhang', serif;
+  font-size: 200px;          /* chữ nền rất to */
+  color: rgba(0,0,0,0.05);   /* màu nhạt làm watermark */
+  text-align: center;
+  overflow: hidden;
+}
+
+
 </style>
 
 
@@ -336,9 +349,10 @@ function lookupChar(char) {
 
 let currentChar = "";
 let currentTradChar = "";
-let jiaguShowingTrad = false;
+let jiaguShowingTrad = true;
 
 document.getElementById("jiagu").addEventListener("click", () => {
+  console.log(jiaguShowingTrad)
   jiaguShowingTrad = !jiaguShowingTrad;
   document.getElementById("jiagu").textContent = jiaguShowingTrad ? currentTradChar : currentChar;
 });
@@ -352,7 +366,7 @@ function showChar() {
 
   currentChar = char;
   currentTradChar = tradChar;
-  jiaguShowingTrad = false; // reset mỗi lần nhập mới
+  // jiaguShowingTrad = false; // reset mỗi lần nhập mới
 
   ["songti","jiagu","dazhuan","xiaozhuan","lishu","kaiti","xingshu","caoshu","handwriting"].forEach(id=>{
     document.getElementById(id).textContent = char || "字";
@@ -391,6 +405,84 @@ function showChar() {
         <div class="hv">(chưa có Hán Việt)</div>
       </div>`;
   }
+
+
+  // --- background update ---
+let bg = document.getElementById("yinzhang-bg-layer");
+if (!bg) {
+  bg = document.createElement("div");
+  bg.id = "yinzhang-bg-layer";
+  bg.style.position = "fixed";
+  bg.style.top = "0";
+  bg.style.left = "0";
+  bg.style.width = "100%";
+  bg.style.height = "100%";
+  bg.style.zIndex = "-1";  // nằm dưới toàn bộ UI
+  bg.style.display = "flex";
+  bg.style.justifyContent = "center";
+  bg.style.alignItems = "center";
+  bg.style.pointerEvents = "none"; // không cản click
+  bg.style.fontFamily = "Yinzhang";
+  bg.style.fontSize = "600px";
+  bg.style.color = "rgba(200,0,0,0.08)"; // đỏ nhạt
+  document.body.appendChild(bg);
+}
+
+// update nội dung nền mỗi lần nhập
+bg.innerText = char || "字";
+
+// cập nhật nền pattern
+  updateYinzhangBackground(tradChar);
+}
+
+// function updateYinzhangBackground(char) {
+//   if (!char) char = "字";
+
+//   const size = 120;   // tile size
+//   const repeats = 5;  // số chữ trong 1 tile (để xoay khác nhau)
+
+//   let texts = "";
+//   for (let i = 0; i < repeats; i++) {
+//     let angle = Math.floor(Math.random() * 30 - 15); // xoay -15° đến +15°
+//     let x = Math.random() * size;
+//     let y = Math.random() * size;
+//     texts += `<text x="${x}" y="${y}" font-family="Yinzhang" font-size="60"
+//       fill="rgba(200,0,0,0.08)" transform="rotate(${angle},${x},${y})"
+//       text-anchor="middle" dominant-baseline="central">${char}</text>`;
+//   }
+
+//   const svg = `
+//     <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+//       ${texts}
+//     </svg>`;
+
+//   const svgData = encodeURIComponent(svg)
+//     .replace(/'/g, "%27")
+//     .replace(/"/g, "%22");
+
+//   document.body.style.backgroundImage = `url("data:image/svg+xml,${svgData}")`;
+//   document.body.style.backgroundRepeat = "repeat";
+//   document.body.style.backgroundSize = `${size}px ${size}px`;
+// }
+
+
+function updateYinzhangBackground(char) {
+  if (!char) char = "字";
+
+  // encode SVG
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+      <text x="50%" y="50%" font-family="Yinzhang" font-size="60"
+            fill="rgba(200,0,0,0.08)" text-anchor="middle" dominant-baseline="central">
+        ${char}
+      </text>
+    </svg>`;
+  const svgData = encodeURIComponent(svg).replace(/'/g, "%27").replace(/"/g, "%22");
+
+  // apply as body background
+  document.body.style.backgroundImage = `url("data:image/svg+xml,${svgData}")`;
+  document.body.style.backgroundRepeat = "repeat";
+  document.body.style.backgroundSize = "100px 100px"; // khoảng cách pattern
 }
 
 
