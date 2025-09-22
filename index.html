@@ -143,7 +143,14 @@
 
   
   .kaiti { font-family: "KaiTi","STKaiti",serif; }
-  .songti { font-family: "Noto Serif SC", cursive; }
+  
+@font-face {
+  font-family: 'Songti';
+  src: url('font/zhouzisongti.otf') format('truetype');
+}
+.songti, #songti {
+  font-family: 'Songti', serif;
+}
 
 /* --- 甲骨文 (Jiagu) --- */
 @font-face {
@@ -631,3 +638,4 @@ loadDefaultCSV();
 
 </body>
 </html>
+
