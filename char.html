@@ -346,10 +346,10 @@ async function loadDefaultCSV() {
 function lookupChar(char) {
   return dictionary.filter(row => row.char === char);
 }
-
+const JIAGU_SHOWING_INIT = true;
 let currentChar = "";
 let currentTradChar = "";
-let jiaguShowingTrad = true;
+let jiaguShowingTrad = JIAGU_SHOWING_INIT;
 
 document.getElementById("jiagu").addEventListener("click", () => {
   console.log(jiaguShowingTrad)
@@ -366,7 +366,7 @@ function showChar() {
 
   currentChar = char;
   currentTradChar = tradChar;
-  // jiaguShowingTrad = false; // reset mỗi lần nhập mới
+  jiaguShowingTrad = JIAGU_SHOWING_INIT; // reset mỗi lần nhập mới
 
   ["songti","jiagu","dazhuan","xiaozhuan","lishu","kaiti","xingshu","caoshu","handwriting"].forEach(id=>{
     document.getElementById(id).textContent = char || "字";
