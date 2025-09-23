@@ -539,7 +539,7 @@ function showChar() {
   document.getElementById("jiagu").textContent = tradChar || "字";
 
   const found = lookupChar(tradChar);
-
+  let py_pro = window.pinyinPro.pinyin(char, { toneType: "pinyin" });
   if (found.length > 0) {
     document.getElementById("pinyin").innerHTML = tradChar + found.map(f => {
       let hv = f.hanviet.length > 0 ? f.hanviet.join(", ") : "(không có)";
@@ -548,16 +548,16 @@ function showChar() {
               : window.pinyinPro.pinyin(char, { toneType: "pinyin" });
       return `
         <div class="pyhv">
-          <div class="py">${py}</div>
+          <div class="py">${py} | ${py_pro}</div>
           <div class="hv">${hv}</div>
         </div>`;
     }).join("");
   } else {
     // fallback nếu không có trong hanviet.csv
-    let py = window.pinyinPro.pinyin(char, { toneType: "pinyin" });
+    
     document.getElementById("pinyin").innerHTML = `
       <div class="pyhv">
-        <div class="py">${py}</div>
+        <div class="py">${py} | ${py_pro}</div>
         <div class="hv">(chưa có Hán Việt)</div>
       </div>`;
   }
@@ -681,6 +681,7 @@ loadDefaultCSV();
 
 </body>
 </html>
+
 
 
 
