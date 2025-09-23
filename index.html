@@ -544,8 +544,10 @@ function showChar() {
     document.getElementById("pinyin").innerHTML = tradChar + found.map(f => {
       let hv = f.hanviet.length > 0 ? f.hanviet.join(", ") : "(không có)";
       // fallback pinyin nếu là "*"
+      // let py = f.pinyin && f.pinyin !== "*" ? f.pinyin 
+      //         : window.pinyinPro.pinyin(char, { toneType: "pinyin" });
       let py = f.pinyin && f.pinyin !== "*" ? f.pinyin 
-              : window.pinyinPro.pinyin(char, { toneType: "pinyin" });
+              : "*";
       return `
         <div class="pyhv">
           <div class="py">${py} | ${py_pro}</div>
@@ -681,6 +683,7 @@ loadDefaultCSV();
 
 </body>
 </html>
+
 
 
 
