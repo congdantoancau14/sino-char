@@ -4,31 +4,28 @@
 <meta charset="UTF-8">
 <title>Pinyin Dictionary Grid</title>
 <style>
-  /* body {
-    font-family: sans-serif;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-  } */
+  
+html, body {
+  height: 100%;       /* ensure both stretch */
+  margin: 0;
+}
 
 body {
   display: grid;
-  place-items: center; /* shorthand for align-items + justify-items */
-  min-height: 100vh;   /* full viewport height */
-  margin: 0;           /* remove default body margin */
+  align-items: center;     /* vertical centering */
+  justify-content: center; /* horizontal centering */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 30px 20px;
+  /* optional: max-width to avoid stretching full screen */
+  max-width: 800px;
 }
 
 
-  .grid {
-    display: grid;
-    /* grid-template-columns: repeat(4, 1fr); */
-    grid-template-columns: repeat(6, 1fr);
-    gap: 30px 20px; /* chừa chỗ cho label */
-  }
-
  
-
-
 
   .cell {
     display: flex;
@@ -665,6 +662,7 @@ loadDefaultCSV();
 
 </body>
 </html>
+
 
 
 
