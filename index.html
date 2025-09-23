@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Pinyin Dictionary Grid</title>
 <style>
   
@@ -28,10 +30,17 @@ body {
     margin-top: 80px;
   }
 
-/* Mobile (max-width ~768px, adjust as needed) */
+/* Tablet (e.g. iPad, mid-size screens) */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+    grid-template-columns: repeat(2, 1fr);
     margin-top: 40px; /* optional smaller spacing */
   }
 }
@@ -672,6 +681,7 @@ loadDefaultCSV();
 
 </body>
 </html>
+
 
 
 
