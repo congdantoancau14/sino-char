@@ -506,11 +506,31 @@ const JIAGU_SHOWING_INIT = true;
 let currentChar = "";
 let currentTradChar = "";
 let jiaguShowingTrad = JIAGU_SHOWING_INIT;
+let showingTrad = false;
 
-document.getElementById("jiagu").addEventListener("click", () => {
-  // console.log(jiaguShowingTrad)
-  jiaguShowingTrad = !jiaguShowingTrad;
-  document.getElementById("jiagu").textContent = jiaguShowingTrad ? currentTradChar : currentChar;
+// document.getElementById("jiagu").addEventListener("click", () => {
+//   // console.log(jiaguShowingTrad)
+//   jiaguShowingTrad = !jiaguShowingTrad;
+//   document.getElementById("jiagu").textContent = jiaguShowingTrad ? currentTradChar : currentChar;
+// });
+
+// cập nhật tất cả block
+function updateBlocks() {
+  const showChar = showingTrad ? currentTradChar : currentChar;
+  
+  ["songti","jiagu","dazhuan","xiaozhuan","lishu","kaiti","xingshu","caoshu","handwriting"].forEach(id=>{
+    const el = document.getElementById(id);
+    console.log(showChar)
+    if (el) el.textContent = showChar || "字";
+  });
+}
+
+// click toàn bộ .block → switch simp/trad
+document.querySelectorAll(".block").forEach(el=>{
+  el.addEventListener("click", () => {
+    showingTrad = !showingTrad;
+    updateBlocks();
+  });
 });
 
 function showChar() {
@@ -523,10 +543,13 @@ function showChar() {
   currentChar = char;
   currentTradChar = tradChar;
   jiaguShowingTrad = JIAGU_SHOWING_INIT; // reset mỗi lần nhập mới
+  showingTrad = false;
 
-  ["songti","jiagu","dazhuan","xiaozhuan","lishu","kaiti","xingshu","caoshu","handwriting"].forEach(id=>{
-    document.getElementById(id).textContent = char || "字";
-  });
+  updateBlocks();
+
+  // ["songti","jiagu","dazhuan","xiaozhuan","lishu","kaiti","xingshu","caoshu","handwriting"].forEach(id=>{
+  //   document.getElementById(id).textContent = char || "字";
+  // });
 
    // Block Jiagu: lookup giản thể trước
   // const found_jiagu = lookupChar(char);
