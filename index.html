@@ -564,38 +564,42 @@ function showChar() {
       </div>`;
   }
 
-
-  // --- background update ---
-let bg = document.getElementById("yinzhang-bg-layer");
-if (!bg) {
-  bg = document.createElement("div");
-  bg.id = "yinzhang-bg-layer";
-  bg.style.position = "fixed";
-  bg.style.top = "0";
-  bg.style.left = "0";
-  bg.style.width = "100%";
-  bg.style.height = "100%";
-  bg.style.zIndex = "-1";  // nằm dưới toàn bộ UI
-  bg.style.display = "flex";
-  bg.style.justifyContent = "center";
-  bg.style.alignItems = "center";
-  bg.style.pointerEvents = "none"; // không cản click
-  bg.style.fontFamily = "Yinzhang";
-  bg.style.fontSize = "600px";
-  bg.style.color = "rgba(200,0,0,0.08)"; // đỏ nhạt
-  document.body.appendChild(bg);
-}
-
+  
   console.log('char:',tradChar);
-// update nội dung nền mỗi lần nhập
-bg.innerText = tradChar || "字";
+
+  updateWatermark(tradChar)
   
 // cập nhật nền pattern
-  // updateYinzhangBackground(tradChar);
+  updateYinzhangBackground(tradChar);
   
   updateScreenBorder(tradChar);
 }
 
+function updateWatermark(char) {
+  // --- background update ---
+  let bg = document.getElementById("yinzhang-bg-layer");
+  if (!bg) {
+    bg = document.createElement("div");
+    bg.id = "yinzhang-bg-layer";
+    bg.style.position = "fixed";
+    bg.style.top = "0";
+    bg.style.left = "0";
+    bg.style.width = "100%";
+    bg.style.height = "100%";
+    bg.style.zIndex = "-1";  // nằm dưới toàn bộ UI
+    bg.style.display = "flex";
+    bg.style.justifyContent = "center";
+    bg.style.alignItems = "center";
+    bg.style.pointerEvents = "none"; // không cản click
+    bg.style.fontFamily = "Yinzhang";
+    bg.style.fontSize = "600px";
+    bg.style.color = "rgba(200,0,0,0.08)"; // đỏ nhạt
+    document.body.appendChild(bg);
+  }
+    
+  // update nội dung nền mỗi lần nhập
+  bg.innerText = char || "字";
+}
 
 function updateYinzhangBackground(char) {
   if (!char) char = "字";
@@ -684,6 +688,7 @@ loadDefaultCSV();
 
 </body>
 </html>
+
 
 
 
