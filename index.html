@@ -586,13 +586,13 @@ if (!bg) {
   document.body.appendChild(bg);
 }
 
-// update nội dung nền mỗi lần nhập
-bg.innerText = char || "字";
-
   console.log('char:',tradChar);
+// update nội dung nền mỗi lần nhập
+bg.innerText = tradChar || "字";
+  
 // cập nhật nền pattern
   // updateYinzhangBackground(tradChar);
-
+  
   updateScreenBorder(tradChar);
 }
 
@@ -684,6 +684,7 @@ loadDefaultCSV();
 
 </body>
 </html>
+
 
 
 
